@@ -88,13 +88,13 @@ class Book:
         return self._pages < 100
 
     def get_days_of_reading(self, pages_per_day: int) -> str:
-        """Расчет количества дней для прочтения книги.
+        """Расчет количества дней для прочтения.
 
         Args:
             pages_per_day: Скорость чтения (страниц в день).
 
         Returns:
-            Строка с информацией о количестве дней.
+            Количество дней для прочтения.
         """
 
         days = max(1, round(self._pages / pages_per_day))
@@ -102,12 +102,12 @@ class Book:
 
 
 class Actions:
-    """Класс для управления коллекцией книг."""
+    """Класс для управления книгами."""
 
     books = []
 
     def add_book(self) -> None:
-        """Добавление новой книги в коллекцию."""
+        """Добавление новой книги."""
 
         print("\n--- Добавление новой книги ---")
         title = input("Введите название: ")
@@ -128,7 +128,7 @@ class Actions:
                 print("Введите целое число")
 
     def show_all_books(self) -> None:
-        """Отображение всех книг в коллекции."""
+        """Отображение всех книг."""
 
         print("\n--- Все книги ---")
         if not self.books:
@@ -140,7 +140,7 @@ class Actions:
             print(f"{i + 1}. '{book.get_title()}'")
 
     def find_short_book(self) -> None:
-        """Поиск и отображение коротких книг."""
+        """Поиск коротких книг."""
 
         print("\n--- Короткие книги (короче 100 страниц) ---")
         short_books = [book for book in self.books if book.is_short_book()]
@@ -202,7 +202,7 @@ class Actions:
             print("Такой книги нет.")
 
     def run_menu(self) -> None:
-        """Запуск меню управления книгами."""
+        """Запуск меню управления."""
 
         is_running = True
 
@@ -246,7 +246,7 @@ class Main:
     book_actions = Actions()
 
     def run(self) -> None:
-        """Запуск главного меню приложения."""
+        """Запуск меню."""
 
         is_running = True
 
