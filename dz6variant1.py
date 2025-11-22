@@ -1,58 +1,135 @@
 class Book:
-    def __init__(self, title = "", author = "", pages = 1):
+    """Класс для представления книги."""
+
+    def __init__(self, title: str = "NA", author: str = "NA", pages: int = 1) -> None:
+        """Инициализация/конструктор класса.
+
+        Args:
+            title: Название книги.
+            author: Автор книги.
+            pages: Количество страниц.
+        """
+
         self._title = title
         self._author = author
         self.set_pages(pages)
 
-    def get_title(self):
+    def get_title(self) -> str:
+        """Геттер для названия книги.
+
+        Returns:
+            title: Название книги.
+        """
+
         return self._title
 
-    def get_author(self):
+    def get_author(self) -> str:
+        """Геттер для автора книги.
+
+        Returns:
+            author: Автор книги.
+        """
+
         return self._author
 
-    def get_pages(self):
+    def get_pages(self) -> int:
+        """Геттер для количества страниц.
+
+        Returns:
+            pages: Количество страниц.
+        """
+
         return self._pages
 
-    def set_title(self, title):
+    def set_title(self, title: str) -> None:
+        """Сеттер для названия книги.
+
+        Args:
+            title: Название книги.
+        """
+
         self._title = title
 
-    def set_author(self, author):
+    def set_author(self, author: str) -> None:
+        """Сеттер для автора книги.
+
+        Args:
+            author: Автор книги.
+        """
+
         self._author = author
 
-    def set_pages(self, pages):
-        if pages <= 0:
-            raise ValueError("Количество страниц должно быть больше 0")
-        self._pages = pages
+    def set_pages(self, pages: int) -> None:
+        """Сеттер для количества страниц.
 
-    def info(self):
+        Args:
+            pages: Количество страниц.
+        """
+
+        if pages <= 0:
+            print("Количество страниц должно быть больше 0")
+        else:
+            self._pages = pages
+
+    def info(self) -> None:
+        """Вывод информации о книге."""
+
         print(f"Название: {self._title}")
         print(f"Автор: {self._author}")
         print(f"Количество страниц: {self._pages}")
 
-    def is_short_book(self):
+    def is_short_book(self) -> bool:
+        """Проверка, является ли книга короткой.
+
+        Returns:
+            True если книга короче 100 страниц, иначе False.
+        """
+
         return self._pages < 100
 
-    def get_days_of_reading(self, pages_per_day):
+    def get_days_of_reading(self, pages_per_day: int) -> str:
+        """Расчет количества дней для прочтения книги.
+
+        Args:
+            pages_per_day: Скорость чтения (страниц в день).
+
+        Returns:
+            Строка с информацией о количестве дней.
+        """
+
         days = max(1, round(self._pages / pages_per_day))
         return f"Книгу можно прочитать за {days} дней"
 
 
 class Actions:
-    def __init__(self):
-        self.books = []
+    """Класс для управления коллекцией книг."""
 
-    def add_book(self):
+    books = []
+
+    def add_book(self) -> None:
+        """Добавление новой книги в коллекцию."""
+
         print("\n--- Добавление новой книги ---")
         title = input("Введите название: ")
         author = input("Введите автора: ")
 
-        pages = int(input("Введите количество страниц: "))
+        pages_input = True
+        while pages_input:
+            try:
+                pages = int(input("Введите количество страниц: "))
+                if pages <= 0:
+                    print("Количество страниц должно быть больше 0")
+                else:
+                    book = Book(title, author, pages)
+                    self.books.append(book)
+                    print("Книга добавлена")
+                    pages_input = False
+            except ValueError:
+                print("Введите целое число")
 
-        book = Book(title, author, pages)
-        self.books.append(book)
-        print("Книга добавлена")
+    def show_all_books(self) -> None:
+        """Отображение всех книг в коллекции."""
 
-    def show_all_books(self):
         print("\n--- Все книги ---")
         if not self.books:
             print("Список книг пуст.")
@@ -62,7 +139,9 @@ class Actions:
             book = self.books[i]
             print(f"{i + 1}. '{book.get_title()}'")
 
-    def find_short_book(self):
+    def find_short_book(self) -> None:
+        """Поиск и отображение коротких книг."""
+
         print("\n--- Короткие книги (короче 100 страниц) ---")
         short_books = [book for book in self.books if book.is_short_book()]
 
@@ -74,32 +153,60 @@ class Actions:
             book = short_books[i]
             print(f"{i + 1}. '{book.get_title()}' - {book.get_author()} ({book.get_pages()} стр.)")
 
-    def days_of_reading(self):
+    def days_of_reading(self) -> None:
+        """Расчет дней чтения для выбранной книги."""
+
         self.show_all_books()
         if not self.books:
             return
 
-        index = int(input("Введите номер книги: ")) - 1
+        index_input = True
+        while index_input:
+            try:
+                index = int(input("Введите номер книги: ")) - 1
+                index_input = False
+            except ValueError:
+                print("Введите целое число")
+
         if 0 <= index < len(self.books):
-            speed = int(input("Введите скорость чтения (страниц в день): "))
+            speed_input = True
+            while speed_input:
+                try:
+                    speed = int(input("Введите скорость чтения (страниц в день): "))
+                    speed_input = False
+                except ValueError:
+                    print("Введите целое число")
             print(self.books[index].get_days_of_reading(speed))
         else:
             print("Такой книги нет.")
 
-    def show_info(self):
+    def show_info(self) -> None:
+        """Отображение информации о выбранной книге."""
+
         self.show_all_books()
         if not self.books:
             return
 
-        index = int(input("Введите номер книги для просмотра информации: ")) - 1
+        index_input = True
+        while index_input:
+            try:
+                index = int(input("Введите номер книги для просмотра информации: ")) - 1
+                index_input = False
+            except ValueError:
+                print("Введите целое число")
+
         if 0 <= index < len(self.books):
             print("\n--- Информация о книге ---")
             self.books[index].info()
         else:
             print("Такой книги нет.")
 
-    def run_menu(self):
-        while True:
+    def run_menu(self) -> None:
+        """Запуск меню управления книгами."""
+
+        is_running = True
+
+        while is_running:
             print("\n--- Меню управления книгами ---")
             print("1. Добавить книгу")
             print("2. Показать все книги")
@@ -108,7 +215,13 @@ class Actions:
             print("5. Посчитать дни чтения")
             print("6. Вернуться в главное меню")
 
-            choice = int(input("Выберите действие (1-6): "))
+            choice_input = True
+            while choice_input:
+                try:
+                    choice = int(input("Выберите действие (1-6): "))
+                    choice_input = False
+                except ValueError:
+                    print("Введите целое число")
 
             match choice:
                 case 1:
@@ -122,65 +235,40 @@ class Actions:
                 case 5:
                     self.days_of_reading()
                 case 6:
-                    break
+                    is_running = False
                 case _:
                     print("Некорректный выбор.")
 
 
 class Main:
-    def __init__(self):
-        self.book_actions = Actions()
+    """Главный класс приложения."""
 
-    def demonstrate(self):
-        print("\n=== Демонстрация работы класса Book ===")
+    book_actions = Actions()
 
-        print("\n1. Создание экземпляров:")
+    def run(self) -> None:
+        """Запуск главного меню приложения."""
 
-        book1 = Book()
-        print("Создана книга через конструктор без параметров")
+        is_running = True
 
-        book2 = Book("Норвежский лес", "Харуки Мураками", 368)
-        print("Создана книга через конструктор с параметрами")
-
-        print("\n2. Работа с сеттерами:")
-        book1.set_title("Обыкновенная история")
-        book1.set_author("И.А. Гончаров")
-        book1.set_pages(416)
-        print("Установлены значения через сеттеры")
-
-        print("\n3. Работа с геттерами:")
-        print(f"Название = {book1.get_title()}")
-        print(f"Автор = {book1.get_author()}")
-        print(f"Страниц = {book1.get_pages()}")
-
-        print("\n4. Метод info():")
-        book1.info()
-
-        print("\n5. Дополнительные методы:")
-        print(f"Длинная книга: {book1.is_short_book()}")
-        print(f"Длинная книга: {book2.is_short_book()}")
-        print(book1.get_days_of_reading(50))
-        print(book2.get_days_of_reading(30))
-
-        self.book_actions.books.extend([book1, book2])
-
-    def run(self):
-        while True:
+        while is_running:
             print("\n=== Главное меню ===")
-            print("1. Демонстрация работы класса Book")
-            print("2. Управление книгами")
-            print("3. Завершение программы")
+            print("1. Управление книгами")
+            print("2. Завершение программы")
 
-            choice = int(input("Выберите действие (1-3): "))
+            choice_input = True
+            while choice_input:
+                try:
+                    choice = int(input("Выберите действие (1-2): "))
+                    choice_input = False
+                except ValueError:
+                    print("Введите целое число")
 
             match choice:
                 case 1:
-                    self.demonstrate()
-                case 2:
                     self.book_actions.run_menu()
-                case 3:
+                case 2:
                     print("Программа завершена")
-                    break
+                    is_running = False
                 case _:
                     print("Некорректный выбор.")
 
